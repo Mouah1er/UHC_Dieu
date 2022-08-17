@@ -1,0 +1,6 @@
+name: UHCDieu
+version: '${version}'
+main: fr.twah2em.uhcdieu.Main
+api-version: 1.19
+authors: [ Twah2em, Neal ]
+description: Plugin UHCDieu. Concept par Neal
