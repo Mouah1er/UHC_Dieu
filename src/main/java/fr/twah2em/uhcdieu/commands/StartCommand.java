@@ -27,11 +27,11 @@ public class StartCommand extends UHCCommand {
 
         final CompletableFuture<Boolean> startCommandConfirmation = new CompletableFuture<>();
 
-        main.startCommandConfirmation().put(player.getUniqueId(), startCommandConfirmation);
+        main.gameManager().startCommandConfirmation().put(player.getUniqueId(), startCommandConfirmation);
 
         startCommandConfirmation.thenAcceptAsync(acceptation -> {
             if (acceptation) {
-                main.gameManager().startGame();
+                main.gameManager().startStartingRunnable();
             } else {
                 player.sendMessage(Main.PREFIX + "§cVous avez bien annulé le lancement de la partie.");
             }
@@ -45,7 +45,7 @@ public class StartCommand extends UHCCommand {
         if (!commandSender.hasPermission("uhc.start")) return UHCCommandCallback.permissionCallback(commandSender);
 
         if (GameState.gameState() != GameState.WAITING) return () -> {
-            commandSender.sendMessage(Main.PREFIX + "§cLa partie est déjà en cours");
+            commandSender.sendMessage(Main.PREFIX + "§cLa partie est déjà en cours.");
             return false;
         };
 

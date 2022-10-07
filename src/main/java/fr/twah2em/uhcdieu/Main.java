@@ -1,31 +1,34 @@
 package fr.twah2em.uhcdieu;
 
 import fr.twah2em.uhcdieu.commands.StartCommand;
-import fr.twah2em.uhcdieu.commands.internal.CommandRegistration;
+import fr.twah2em.uhcdieu.commands.internal.UHCCommandRegistration;
 import fr.twah2em.uhcdieu.game.GameManager;
 import fr.twah2em.uhcdieu.game.GameState;
+import fr.twah2em.uhcdieu.listeners.AsyncPlayerChatListener;
+import fr.twah2em.uhcdieu.listeners.internal.UHCListenerRegistration;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.TextComponent;
+import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.plugin.java.JavaPlugin;
-
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
-import java.util.concurrent.CompletableFuture;
 
 public final class Main extends JavaPlugin {
     public static final String PREFIX = "§c[§6UHC-Dieu§c] §r";
 
     private GameManager gameManager;
-    private Map<UUID, CompletableFuture<Boolean>> startCommandConfirmation;
 
     @Override
     public void onEnable() {
         this.gameManager = new GameManager(this);
-        this.startCommandConfirmation = new HashMap<>();
 
-        final CommandRegistration commandRegistration = new CommandRegistration(this);
+        final UHCCommandRegistration uhcCommandRegistration = new UHCCommandRegistration(this);
+        final UHCListenerRegistration uhcListenerRegistration = new UHCListenerRegistration(this);
 
-        commandRegistration.registerCommands(
+        uhcCommandRegistration.registerCommands(
                 StartCommand::new
+        );
+
+        uhcListenerRegistration.registerListeners(
+                AsyncPlayerChatListener::new
         );
 
         GameState.gameState(GameState.WAITING);
@@ -33,9 +36,5 @@ public final class Main extends JavaPlugin {
 
     public GameManager gameManager() {
         return gameManager;
-    }
-
-    public Map<UUID, CompletableFuture<Boolean>> startCommandConfirmation() {
-        return startCommandConfirmation;
     }
 }

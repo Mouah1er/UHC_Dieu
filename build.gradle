@@ -7,10 +7,19 @@ version = '1.0.0-SNAPSHOT'
 
 repositories {
     mavenCentral()
-    maven { url = "https://repo.purpurmc.org/snapshots" }
-
+    maven {
+        url "https://repo.purpurmc.org/snapshots"
+    }
 }
 
 dependencies {
     compileOnly "org.purpurmc.purpur:purpur-api:1.18.2-R0.1-SNAPSHOT"
 }
+
+compileJava.options.encoding("UTF-8")
+
+java {
+    toolchain.languageVersion.set(JavaLanguageVersion.of(17))
+}
+
+libsDirName = "C:\\Users\\ocsar\\Desktop\\servers\\purpur-1.18.2\\plugins"

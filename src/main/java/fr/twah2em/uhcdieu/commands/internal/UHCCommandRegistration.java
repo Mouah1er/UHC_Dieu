@@ -6,10 +6,10 @@ import org.bukkit.command.CommandMap;
 
 import java.util.function.Function;
 
-public class CommandRegistration {
+public class UHCCommandRegistration {
     private final Main main;
 
-    public CommandRegistration(Main main) {
+    public UHCCommandRegistration(Main main) {
         this.main = main;
     }
 
