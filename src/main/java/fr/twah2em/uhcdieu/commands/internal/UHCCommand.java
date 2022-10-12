@@ -5,11 +5,14 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Collections;
+
 public abstract class UHCCommand extends Command {
     private final UHCCommandMetadata uhcCommandMetadata;
 
     public UHCCommand(UHCCommandMetadata uhcCommandMetadata) {
-        super(uhcCommandMetadata.name(), uhcCommandMetadata.description(), uhcCommandMetadata.usage(), uhcCommandMetadata.aliases());
+        super(uhcCommandMetadata.name(), uhcCommandMetadata.description(), uhcCommandMetadata.usage(),
+                uhcCommandMetadata.aliases() == null ? Collections.emptyList() : uhcCommandMetadata.aliases());
 
         this.uhcCommandMetadata = uhcCommandMetadata;
 
