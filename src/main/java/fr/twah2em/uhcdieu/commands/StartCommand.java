@@ -14,7 +14,11 @@ public class StartCommand extends UHCCommand {
     private final Main main;
 
     public StartCommand(Main main) {
-        super(new UHCCommandMetadata("start", "Commencer la partie", "start", null, null, "uhc.start"));
+        super(new UHCCommandMetadata.UHCCommandMetadataBuilder("start")
+                .withDescription("Commencer la partie")
+                .withUsage("start")
+                .withPermission("uhc.start")
+                .build());
 
         this.main = main;
     }
@@ -37,6 +41,7 @@ public class StartCommand extends UHCCommand {
             }
         });
     }
+
 
     @Override
     public UHCCommandCallback shouldBeExecuted(CommandSender commandSender, String[] args) {
