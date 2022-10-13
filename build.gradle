@@ -6,10 +6,7 @@ group = 'fr.twah2em'
 version = '1.0.0-SNAPSHOT'
 
 repositories {
-    mavenCentral()
-    maven {
-        url "https://repo.purpurmc.org/snapshots"
-    }
+    maven { url = "https://repo.purpurmc.org/snapshots" }
 }
 
 dependencies {
@@ -22,4 +19,4 @@ java {
     toolchain.languageVersion.set(JavaLanguageVersion.of(17))
 }
 
-libsDirName = "C:\\Users\\ocsar\\Desktop\\servers\\purpur-1.18.2\\plugins"
+libsDirName = "C:\\Users\\ocsar\\Bureau\\servers\\purpur-1.18.2\\plugins"

@@ -6,9 +6,6 @@ import fr.twah2em.uhcdieu.game.GameManager;
 import fr.twah2em.uhcdieu.game.GameState;
 import fr.twah2em.uhcdieu.listeners.AsyncPlayerChatListener;
 import fr.twah2em.uhcdieu.listeners.internal.UHCListenerRegistration;
-import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.TextComponent;
-import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public final class Main extends JavaPlugin {

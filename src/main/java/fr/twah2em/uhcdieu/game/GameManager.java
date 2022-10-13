@@ -53,6 +53,10 @@ public class GameManager {
                 .forEach(TeleportationUtils::safeRandomlyTeleportPlayer);
     }
 
+    public void choosePlayersStatus() {
+        
+    }
+
     public EpisodesManager episodesManager() {
         return episodesManager;
     }

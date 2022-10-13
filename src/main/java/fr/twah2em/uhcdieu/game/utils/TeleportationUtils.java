@@ -11,6 +11,7 @@ import java.util.Random;
 public class TeleportationUtils {
     private static final List<Location> locations = new ArrayList<>();
     public static void safeRandomlyTeleportPlayer(Player player) {
+        System.out.println("test");
         player.teleport(generateRandomLocation(player));
     }
 
