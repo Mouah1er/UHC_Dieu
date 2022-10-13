@@ -1,4 +1,4 @@
-package fr.twah2em.uhcdieu.inventories.internal;
+package fr.twah2em.uhcdieu.inventories;
 
 import fr.twah2em.uhcdieu.streams.StreamUtils;
 import org.bukkit.Bukkit;

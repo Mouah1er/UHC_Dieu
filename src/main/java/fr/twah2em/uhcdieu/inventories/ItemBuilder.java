@@ -1,4 +1,4 @@
-package fr.twah2em.uhcdieu.inventories.internal;
+package fr.twah2em.uhcdieu.inventories;
 
 import org.bukkit.Color;
 import org.bukkit.Material;
