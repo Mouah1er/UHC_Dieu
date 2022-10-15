@@ -2,11 +2,15 @@ package fr.twah2em.uhcdieu.inventories;
 
 import org.bukkit.Color;
 import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
+import org.bukkit.inventory.meta.SkullMeta;
+import org.bukkit.persistence.PersistentDataType;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -150,6 +154,20 @@ public class ItemBuilder {
 
     public ItemBuilder withArmorColor(Color color) {
         return withMeta(LeatherArmorMeta.class, m -> m.setColor(color));
+    }
+
+    public ItemBuilder withPlayerHead(OfflinePlayer offlinePlayer) {
+        if (this.meta instanceof final SkullMeta skullMeta) {
+            skullMeta.setOwningPlayer(offlinePlayer);
+        }
+
+        return this;
+    }
+
+    public <T> ItemBuilder withPersistentData(String namespace, String key, T value, PersistentDataType<?, T> persistentDataType) {
+        this.meta.getPersistentDataContainer().set(new NamespacedKey(namespace, key), persistentDataType, value);
+
+        return this;
     }
 
     public ItemStack build() {

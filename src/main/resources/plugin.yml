@@ -1,5 +1,5 @@
 name: UHCDieu
-version: '${version}'
+version: '1.0.0'
 main: fr.twah2em.uhcdieu.Main
 api-version: 1.18
 authors: [ Twah2em, Neal ]
