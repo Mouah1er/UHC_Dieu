@@ -4,7 +4,7 @@ import fr.twah2em.uhcdieu.commands.StartCommand;
 import fr.twah2em.uhcdieu.commands.internal.UHCCommandRegistration;
 import fr.twah2em.uhcdieu.game.GameManager;
 import fr.twah2em.uhcdieu.game.GameState;
-import fr.twah2em.uhcdieu.listeners.AsyncPlayerChatListener;
+import fr.twah2em.uhcdieu.listeners.ChatListener;
 import fr.twah2em.uhcdieu.listeners.internal.UHCListenerRegistration;
 import fr.twah2em.uhcdieu.listeners.internal.inventories.InventoryClickListener;
 import fr.twah2em.uhcdieu.listeners.internal.inventories.InventoryCloseListener;
@@ -32,7 +32,7 @@ public final class Main extends JavaPlugin {
                 InventoryOpenListener::new,
                 InventoryClickListener::new,
                 InventoryCloseListener::new,
-                AsyncPlayerChatListener::new
+                ChatListener::new
         );
 
         GameState.gameState(GameState.WAITING);

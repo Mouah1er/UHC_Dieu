@@ -2,7 +2,7 @@ package fr.twah2em.uhcdieu.listeners;
 
 import fr.twah2em.uhcdieu.Main;
 import fr.twah2em.uhcdieu.listeners.internal.UHCListener;
-import io.papermc.paper.event.player.AsyncChatEvent;
+import io.papermc.paper.event.player.ChatEvent;
 import net.kyori.adventure.text.TextComponent;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -11,16 +11,17 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 
-public class AsyncPlayerChatListener implements UHCListener<AsyncChatEvent> {
+// ChatEvent et pas AsyncChatEvent à cause de GameManager#choosePlayersStatus
+public class ChatListener implements UHCListener<ChatEvent> {
     private final Main main;
 
-    public AsyncPlayerChatListener(Main main) {
+    public ChatListener(Main main) {
         this.main = main;
     }
 
     @Override
     @EventHandler
-    public void onEvent(AsyncChatEvent event) {
+    public void onEvent(ChatEvent event) {
         final Player player = event.getPlayer();
         final TextComponent message = (TextComponent) event.message();
         final Map<UUID, CompletableFuture<Boolean>> uuidCompletableFutureMap = main.gameManager().startCommandConfirmation();

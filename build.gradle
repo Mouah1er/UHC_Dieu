@@ -19,4 +19,4 @@ java {
     toolchain.languageVersion.set(JavaLanguageVersion.of(17))
 }
 
-libsDirName = "C:\\Users\\ocsar\\Bureau\\servers\\purpur-1.18.2\\plugins"
+libsDirName = "C:\\Users\\ocsar\\Desktop\\servers\\purpur-1.18.2\\plugins"

@@ -20,18 +20,19 @@ import java.util.function.Consumer;
 import java.util.stream.IntStream;
 
 public class UHCInventory implements InventoryHolder {
-    private Inventory inventory;
+    private final Inventory inventory;
 
-    private String name;
-    private int lines;
+    private final String name;
+    private final int lines;
 
-    private List<ItemStack> items;
+    private final List<ItemStack> items;
     private final boolean glassInEmptySlots;
 
     private final Consumer<InventoryOpenEvent> openConsumer;
     private final Consumer<InventoryClickEvent> clickConsumer;
     private final Consumer<InventoryCloseEvent> closeConsumer;
 
+    // package private
     private UHCInventory(String name, int lines, List<ItemStack> items, boolean glassInEmptySlots, Consumer<InventoryOpenEvent> openConsumer, Consumer<InventoryClickEvent> clickConsumer,
                          Consumer<InventoryCloseEvent> closeConsumer) {
         this.inventory = Bukkit.createInventory(this, lines * 9, Component.text(name));
@@ -105,8 +106,6 @@ public class UHCInventory implements InventoryHolder {
             };
             this.closeConsumer = inventoryCloseEvent -> {
             };
-
-            System.out.println("constructeur");
         }
 
         public UHCInventoryBuilder(UHCInventory uhcInventory) {
@@ -122,7 +121,6 @@ public class UHCInventory implements InventoryHolder {
         }
 
         public UHCInventoryBuilder withItem(ItemStack item) {
-            System.out.println("with item");
             return withItems(item);
         }
 
@@ -133,12 +131,10 @@ public class UHCInventory implements InventoryHolder {
         }
 
         public UHCInventoryBuilder withItems(ItemStack... items) {
-            System.out.println("with items");
             return withItems(Arrays.asList(items));
         }
 
         public UHCInventoryBuilder withItems(List<ItemStack> items) {
-            System.out.println("withItems");
             StreamUtils.forEachIndexed(items, (index, item) -> {
                 if (item.getType() != Material.AIR) {
                     this.items.set(index, item);
@@ -161,7 +157,6 @@ public class UHCInventory implements InventoryHolder {
         }
 
         public UHCInventoryBuilder withClickConsumer(Consumer<InventoryClickEvent> clickConsumer) {
-            System.out.println("withClickConsumer");
             this.clickConsumer = clickConsumer;
 
             return this;
@@ -180,7 +175,6 @@ public class UHCInventory implements InventoryHolder {
         }
 
         public Inventory buildToBukkitInventory() {
-            System.out.println("buildToBukkitInventory");
             return buildToUhcInventory().getInventory();
         }
 

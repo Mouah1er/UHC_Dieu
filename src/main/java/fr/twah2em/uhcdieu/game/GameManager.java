@@ -3,15 +3,10 @@ package fr.twah2em.uhcdieu.game;
 import fr.twah2em.uhcdieu.Main;
 import fr.twah2em.uhcdieu.game.runnables.StartGameBukkitRunnable;
 import fr.twah2em.uhcdieu.game.utils.TeleportationUtils;
-import fr.twah2em.uhcdieu.inventories.ItemBuilder;
-import fr.twah2em.uhcdieu.inventories.UHCInventory;
+import fr.twah2em.uhcdieu.inventories.ChoosePlayersStatusInventory;
 import org.bukkit.Bukkit;
-import org.bukkit.Material;
-import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.persistence.PersistentDataType;
 
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
@@ -26,9 +21,10 @@ public class GameManager {
     private final List<UUID> alivePlayers;
     private final List<UUID> deadPlayers;
     private final List<UUID> votedPlayers;
+
     private final List<UUID> spectators;
     private final List<UUID> playingPlayers;
-
+    private final List<UUID> admins;
     private final List<UUID> selectionnedPlayers;
 
     public GameManager(Main main) {
@@ -41,9 +37,10 @@ public class GameManager {
         this.alivePlayers = new ArrayList<>();
         this.deadPlayers = new ArrayList<>();
         this.votedPlayers = new ArrayList<>();
+
         this.spectators = new ArrayList<>();
         this.playingPlayers = new ArrayList<>();
-
+        this.admins = new ArrayList<>();
         this.selectionnedPlayers = new ArrayList<>();
     }
 
@@ -66,48 +63,10 @@ public class GameManager {
     }
 
     public void choosePlayersStatus(Player starter) {
-        System.out.println("choosePlayersStatus");
-        final Inventory inventory = new UHCInventory.UHCInventoryBuilder("§aChoisir le status de chaque joueur", 5)
-                .withItems(Bukkit.getOnlinePlayers()
-                        .stream()
-                        .map(player -> new ItemBuilder(Material.PLAYER_HEAD)
-                                .withPlayerHead(player)
-                                .withName("§a" + player.getName())
-                                .withLore(selectionnedPlayers.contains(player.getUniqueId()) ? "§a§oJoueur sélectionné (§7cliquez pour déselectionner)" :
-                                        "§c§oJoueur non sélectionné (§7§ocliquez pour sélectionné)")
-                                .withPersistentData("uhc-dieu", "player-uuid", player.getUniqueId().toString(), PersistentDataType.STRING)
-                                .build())
-                        .toList())
-                .withClickConsumer(event -> {
-                    final ItemStack currentItem = event.getCurrentItem();
+        final Inventory inventory = new ChoosePlayersStatusInventory().inventory(starter, main);
 
-                    if (currentItem == null || currentItem.getItemMeta() == null) return;
-
-                    if (currentItem.getType() == Material.PLAYER_HEAD) {
-                        final UUID playerUniqueId = UUID.fromString(
-                                Objects.requireNonNull(currentItem.getItemMeta().getPersistentDataContainer().get(new NamespacedKey("uhc-dieu", "player-uuid"), PersistentDataType.STRING))
-                        );
-                        final Player targetPlayer = Bukkit.getPlayer(playerUniqueId);
-
-                        if (targetPlayer == null) return;
-
-                        if (!selectionnedPlayers.contains(targetPlayer.getUniqueId()))
-                            selectionnedPlayers.add(targetPlayer.getUniqueId());
-                        else selectionnedPlayers.remove(targetPlayer.getUniqueId());
-
-                        currentItem.setLore(Arrays.asList(selectionnedPlayers.contains(targetPlayer.getUniqueId()) ? "§a§oJoueur sélectionné (§7Cliquez pour déselectionner)" :
-                                "§c§oJoueur non sélectionné (§7§oCliquez pour sélectionné)"));
-                    }
-                })
-                .buildToBukkitInventory();
-
-        try {
-
-            starter.openInventory(inventory);
-        } catch (Throwable t) {
-            t.printStackTrace();
-        }
-        main.gameManager().startStartingRunnable();
+        starter.closeInventory();
+        starter.openInventory(inventory);
     }
 
     public EpisodesManager episodesManager() {
@@ -136,5 +95,13 @@ public class GameManager {
 
     public List<UUID> playingPlayers() {
         return playingPlayers;
+    }
+
+    public List<UUID> admins() {
+        return admins;
+    }
+
+    public List<UUID> selectionnedPlayers() {
+        return selectionnedPlayers;
     }
 }
