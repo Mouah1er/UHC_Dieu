@@ -1,6 +1,7 @@
 package fr.twah2em.uhcdieu.inventories;
 
-import fr.twah2em.uhcdieu.streams.StreamUtils;
+import fr.twah2em.uhcdieu.utils.streams.StreamUtils;
+import fr.twah2em.uhcdieu.utils.misc.Pair;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -32,9 +33,11 @@ public class UHCInventory implements InventoryHolder {
     private final Consumer<InventoryClickEvent> clickConsumer;
     private final Consumer<InventoryCloseEvent> closeConsumer;
 
+    private final boolean cancelCloseEvent;
+
     // package private
     private UHCInventory(String name, int lines, List<ItemStack> items, boolean glassInEmptySlots, Consumer<InventoryOpenEvent> openConsumer, Consumer<InventoryClickEvent> clickConsumer,
-                         Consumer<InventoryCloseEvent> closeConsumer) {
+                         Consumer<InventoryCloseEvent> closeConsumer, boolean cancelCloseEvent) {
         this.inventory = Bukkit.createInventory(this, lines * 9, Component.text(name));
         this.name = name;
         this.lines = lines;
@@ -46,6 +49,8 @@ public class UHCInventory implements InventoryHolder {
         this.openConsumer = openConsumer;
         this.clickConsumer = clickConsumer;
         this.closeConsumer = closeConsumer;
+
+        this.cancelCloseEvent = cancelCloseEvent;
     }
 
     public String name() {
@@ -76,9 +81,28 @@ public class UHCInventory implements InventoryHolder {
         return glassInEmptySlots;
     }
 
+    public boolean cancelCloseEvent() {
+        return cancelCloseEvent;
+    }
+
     @Override
     public @NotNull Inventory getInventory() {
         return inventory;
+    }
+
+    @Override
+    public String toString() {
+        return "UHCInventory{" +
+                "\ninventory=" + inventory +
+                ",\n name='" + name + '\'' +
+                ",\n lines=" + lines +
+                ",\n items=" + items +
+                ",\n glassInEmptySlots=" + glassInEmptySlots +
+                ",\n openConsumer=" + openConsumer +
+                ",\n clickConsumer=" + clickConsumer +
+                ",\n closeConsumer=" + closeConsumer +
+                ",\n cancelCloseEvent=" + cancelCloseEvent +
+                "\n}";
     }
 
     public static class UHCInventoryBuilder {
@@ -91,6 +115,8 @@ public class UHCInventory implements InventoryHolder {
         private Consumer<InventoryOpenEvent> openConsumer;
         private Consumer<InventoryClickEvent> clickConsumer;
         private Consumer<InventoryCloseEvent> closeConsumer;
+
+        private boolean cancelCloseEvent;
 
         public UHCInventoryBuilder(String name, int lines) {
             this.name = name;
@@ -106,6 +132,8 @@ public class UHCInventory implements InventoryHolder {
             };
             this.closeConsumer = inventoryCloseEvent -> {
             };
+
+            this.cancelCloseEvent = false;
         }
 
         public UHCInventoryBuilder(UHCInventory uhcInventory) {
@@ -125,7 +153,9 @@ public class UHCInventory implements InventoryHolder {
         }
 
         public UHCInventoryBuilder withItemInSlot(int slot, ItemStack item) {
-            this.items.set(slot, item);
+            if (slot >= 0 && slot < lines * 9) {
+                this.items.set(slot, item);
+            }
 
             return this;
         }
@@ -135,9 +165,22 @@ public class UHCInventory implements InventoryHolder {
         }
 
         public UHCInventoryBuilder withItems(List<ItemStack> items) {
-            StreamUtils.forEachIndexed(items, (index, item) -> {
-                if (item.getType() != Material.AIR) {
-                    this.items.set(index, item);
+            return withItemsInSlots(items
+                    .stream()
+                    .map(item -> {
+                        final int slot = items.indexOf(item);
+
+                        return Pair.of(slot, item);
+                    }).toList());
+        }
+
+        public UHCInventoryBuilder withItemsInSlots(List<? extends Pair<Integer, ItemStack>> items) {
+            StreamUtils.forEachIndexed(items, (index, pair) -> {
+                final Integer slot = pair.left();
+                final ItemStack item = pair.right();
+
+                if (item != null && slot >= 0 && slot < lines * 9) {
+                    this.items.set(slot, item);
                 }
             });
 
@@ -168,10 +211,16 @@ public class UHCInventory implements InventoryHolder {
             return this;
         }
 
+        public UHCInventoryBuilder cancelCloseEvent(boolean cancelCloseEvent) {
+            this.cancelCloseEvent = cancelCloseEvent;
+
+            return this;
+        }
+
         public UHCInventory buildToUhcInventory() {
             if (glassInEmptySlots) fillEmptyElementsWithGlassPane();
 
-            return new UHCInventory(this.name, this.lines, this.items, this.glassInEmptySlots, this.openConsumer, this.clickConsumer, this.closeConsumer);
+            return new UHCInventory(this.name, this.lines, this.items, this.glassInEmptySlots, this.openConsumer, this.clickConsumer, this.closeConsumer, this.cancelCloseEvent);
         }
 
         public Inventory buildToBukkitInventory() {

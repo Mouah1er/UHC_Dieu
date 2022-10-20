@@ -63,7 +63,7 @@ public class GameManager {
     }
 
     public void choosePlayersStatus(Player starter) {
-        final Inventory inventory = new ChoosePlayersStatusInventory().inventory(starter, main);
+        final Inventory inventory = new ChoosePlayersStatusInventory(starter, main).inventory();
 
         starter.closeInventory();
         starter.openInventory(inventory);

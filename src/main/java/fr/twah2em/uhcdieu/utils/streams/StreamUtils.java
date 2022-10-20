@@ -1,7 +1,8 @@
-package fr.twah2em.uhcdieu.streams;
+package fr.twah2em.uhcdieu.utils.streams;
 
 import java.util.List;
 import java.util.function.BiConsumer;
+import java.util.stream.Stream;
 
 public class StreamUtils {
     public static <T> void forEachIndexed(List<T> list, BiConsumer<Integer, T> biConsumer) {
@@ -16,5 +17,10 @@ public class StreamUtils {
                 list.set(index, element);
             }
         });
+    }
+
+    @SafeVarargs
+    public static <T> Stream<T> appendToStream(Stream<? extends T> stream, T... elements) {
+        return Stream.concat(stream, Stream.of(elements));
     }
 }
