@@ -1,6 +1,11 @@
 package fr.twah2em.uhcdieu.utils.streams;
 
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
+
 import java.util.List;
+import java.util.Objects;
+import java.util.UUID;
 import java.util.function.BiConsumer;
 import java.util.stream.Stream;
 
@@ -22,5 +27,14 @@ public class StreamUtils {
     @SafeVarargs
     public static <T> Stream<T> appendToStream(Stream<? extends T> stream, T... elements) {
         return Stream.concat(stream, Stream.of(elements));
+    }
+
+    public static List<String> concatPlayersNameWithColor(List<UUID> list, ChatColor color) {
+        return list
+                .stream()
+                .map(Bukkit::getPlayer)
+                .filter(Objects::nonNull)
+                .map(player -> color + player.getName())
+                .toList();
     }
 }

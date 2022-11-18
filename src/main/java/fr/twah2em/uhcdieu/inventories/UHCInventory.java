@@ -17,7 +17,9 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.function.BooleanSupplier;
 import java.util.function.Consumer;
+import java.util.function.Predicate;
 import java.util.stream.IntStream;
 
 public class UHCInventory implements InventoryHolder {
@@ -213,6 +215,12 @@ public class UHCInventory implements InventoryHolder {
 
         public UHCInventoryBuilder cancelCloseEvent(boolean cancelCloseEvent) {
             this.cancelCloseEvent = cancelCloseEvent;
+
+            return this;
+        }
+
+        public UHCInventoryBuilder cancelCloseEvent(BooleanSupplier supplier) {
+            this.cancelCloseEvent = supplier.getAsBoolean();
 
             return this;
         }

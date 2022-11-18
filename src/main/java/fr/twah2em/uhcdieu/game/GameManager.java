@@ -3,7 +3,7 @@ package fr.twah2em.uhcdieu.game;
 import fr.twah2em.uhcdieu.Main;
 import fr.twah2em.uhcdieu.game.runnables.StartGameBukkitRunnable;
 import fr.twah2em.uhcdieu.game.utils.TeleportationUtils;
-import fr.twah2em.uhcdieu.inventories.ChoosePlayersStatusInventory;
+import fr.twah2em.uhcdieu.inventories.ChoosePlayingPlayersInventory;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
@@ -25,7 +25,7 @@ public class GameManager {
     private final List<UUID> spectators;
     private final List<UUID> playingPlayers;
     private final List<UUID> admins;
-    private final List<UUID> selectionnedPlayers;
+    private final List<UUID> selectedPlayers;
 
     public GameManager(Main main) {
         this.main = main;
@@ -41,7 +41,7 @@ public class GameManager {
         this.spectators = new ArrayList<>();
         this.playingPlayers = new ArrayList<>();
         this.admins = new ArrayList<>();
-        this.selectionnedPlayers = new ArrayList<>();
+        this.selectedPlayers = new ArrayList<>();
     }
 
     public void startStartingRunnable() {
@@ -63,7 +63,7 @@ public class GameManager {
     }
 
     public void choosePlayersStatus(Player starter) {
-        final Inventory inventory = new ChoosePlayersStatusInventory(starter, main).inventory();
+        final Inventory inventory = new ChoosePlayingPlayersInventory(starter, main).inventory();
 
         starter.closeInventory();
         starter.openInventory(inventory);
@@ -101,7 +101,7 @@ public class GameManager {
         return admins;
     }
 
-    public List<UUID> selectionnedPlayers() {
-        return selectionnedPlayers;
+    public List<UUID> selectedPlayers() {
+        return selectedPlayers;
     }
 }
