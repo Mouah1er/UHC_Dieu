@@ -35,7 +35,7 @@ public class StartCommand extends UHCCommand {
 
         startCommandConfirmation.thenAccept(acceptation -> {
             if (acceptation) {
-                main.gameManager().choosePlayersStatus(player);
+                main.gameManager().startStartingRunnable();
             } else {
                 player.sendMessage(Main.PREFIX + "§cVous avez bien annulé le lancement de la partie.");
             }

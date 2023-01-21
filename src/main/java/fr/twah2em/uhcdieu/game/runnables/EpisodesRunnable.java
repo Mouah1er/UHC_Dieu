@@ -31,8 +31,8 @@ public class EpisodesRunnable extends BukkitRunnable {
                 Bukkit.broadcastMessage(Main.PREFIX + "§6Episode " + episode + " !");
             }
 
-            if (episode == 1) {
-
+            if (episode == 2) {
+                
             }
         }
     }

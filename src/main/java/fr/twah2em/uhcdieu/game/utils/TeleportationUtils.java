@@ -22,7 +22,7 @@ public class TeleportationUtils {
         int z = random.nextInt(2000);
 
         Location randomLocation = new Location(player.getWorld(), x, y, z);
-        y = randomLocation.getWorld().getHighestBlockYAt(randomLocation);
+        y = randomLocation.getWorld().getHighestBlockYAt(randomLocation) + 1;
         randomLocation.setY(y);
 
         if (!isLocationSafe(randomLocation)) {

@@ -3,10 +3,8 @@ package fr.twah2em.uhcdieu.game;
 import fr.twah2em.uhcdieu.Main;
 import fr.twah2em.uhcdieu.game.runnables.StartGameBukkitRunnable;
 import fr.twah2em.uhcdieu.game.utils.TeleportationUtils;
-import fr.twah2em.uhcdieu.inventories.ChoosePlayingPlayersInventory;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.Inventory;
 
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
@@ -24,13 +22,11 @@ public class GameManager {
 
     private final List<UUID> spectators;
     private final List<UUID> playingPlayers;
-    private final List<UUID> admins;
-    private final List<UUID> selectedPlayers;
 
     public GameManager(Main main) {
         this.main = main;
 
-        this.episodesManager = new EpisodesManager();
+        this.episodesManager = new EpisodesManager(main);
 
         this.startCommandConfirmation = new HashMap<>();
 
@@ -40,8 +36,6 @@ public class GameManager {
 
         this.spectators = new ArrayList<>();
         this.playingPlayers = new ArrayList<>();
-        this.admins = new ArrayList<>();
-        this.selectedPlayers = new ArrayList<>();
     }
 
     public void startStartingRunnable() {
@@ -52,6 +46,10 @@ public class GameManager {
 
     public void startGame() {
         GameState.gameState(GameState.EPISODES);
+        this.playingPlayers.addAll(Bukkit.getOnlinePlayers()
+                .stream()
+                .map(Player::getUniqueId)
+                .toList());
 
         Bukkit.broadcastMessage(Main.PREFIX + "§a§lLa partie commence ! L'annonce des rôles se fera dans 20 minutes, bonne chance !");
 
@@ -60,13 +58,9 @@ public class GameManager {
                 .map(Bukkit::getPlayer)
                 .filter(Objects::nonNull)
                 .forEach(TeleportationUtils::safeRandomlyTeleportPlayer);
-    }
 
-    public void choosePlayersStatus(Player starter) {
-        final Inventory inventory = new ChoosePlayingPlayersInventory(starter, main).inventory();
-
-        starter.closeInventory();
-        starter.openInventory(inventory);
+        this.episodesManager.episode(1);
+        this.episodesManager.startEpisodesRunnable();
     }
 
     public EpisodesManager episodesManager() {
@@ -95,13 +89,5 @@ public class GameManager {
 
     public List<UUID> playingPlayers() {
         return playingPlayers;
-    }
-
-    public List<UUID> admins() {
-        return admins;
-    }
-
-    public List<UUID> selectedPlayers() {
-        return selectedPlayers;
     }
 }
