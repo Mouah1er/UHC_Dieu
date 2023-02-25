@@ -14,6 +14,8 @@ public class StartGameBukkitRunnable extends BukkitRunnable {
 
     public StartGameBukkitRunnable(Main main) {
         this.main = main;
+
+        runTaskTimer(main, 0L, 20L);
     }
 
     @Override

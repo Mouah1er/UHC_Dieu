@@ -3,9 +3,7 @@ package fr.twah2em.uhcdieu.utils.streams;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 
-import java.util.List;
-import java.util.Objects;
-import java.util.UUID;
+import java.util.*;
 import java.util.function.BiConsumer;
 import java.util.stream.Stream;
 
@@ -36,5 +34,23 @@ public class StreamUtils {
                 .filter(Objects::nonNull)
                 .map(player -> color + player.getName())
                 .toList();
+    }
+
+    public static <K, V> K getKeyByValue(HashMap<K, V> map, V value) {
+        return map.entrySet().stream()
+                .filter(entry -> Objects.equals(entry.getValue(), value))
+                .map(Map.Entry::getKey)
+                .findFirst()
+                .orElse(null);
+    }
+
+    public static <T> List<T> halfList(List<T> list) {
+        return list.subList(0, list.size() / 2);
+    }
+
+    public static <T> List<T> removeDuplicates(List<T> list1, List<T> list2) {
+        List<T> list = new ArrayList<>(list1);
+        list.addAll(list2);
+        return new ArrayList<>(new HashSet<>(list));
     }
 }

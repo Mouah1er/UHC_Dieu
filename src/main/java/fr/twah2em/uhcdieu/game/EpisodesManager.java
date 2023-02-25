@@ -1,7 +1,7 @@
 package fr.twah2em.uhcdieu.game;
 
 import fr.twah2em.uhcdieu.Main;
-import fr.twah2em.uhcdieu.game.runnables.EpisodesRunnable;
+import fr.twah2em.uhcdieu.game.runnables.EpisodesBukkitRunnable;
 
 public class EpisodesManager {
     private final Main main;
@@ -14,7 +14,7 @@ public class EpisodesManager {
     }
 
     public void startEpisodesRunnable() {
-        new EpisodesRunnable(main).runTaskTimer(main, 0L, 20L);
+        new EpisodesBukkitRunnable(main);
     }
 
     public int episode() {

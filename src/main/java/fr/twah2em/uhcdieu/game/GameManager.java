@@ -1,6 +1,8 @@
 package fr.twah2em.uhcdieu.game;
 
 import fr.twah2em.uhcdieu.Main;
+import fr.twah2em.uhcdieu.game.roles.Roles;
+import fr.twah2em.uhcdieu.game.runnables.DayNightCycleBukkitRunnable;
 import fr.twah2em.uhcdieu.game.runnables.StartGameBukkitRunnable;
 import fr.twah2em.uhcdieu.game.utils.TeleportationUtils;
 import org.bukkit.Bukkit;
@@ -38,10 +40,14 @@ public class GameManager {
         this.playingPlayers = new ArrayList<>();
     }
 
+    private void startDayNightCycle() {
+        new DayNightCycleBukkitRunnable(main);
+    }
+
     public void startStartingRunnable() {
         GameState.gameState(GameState.STARTING);
 
-        new StartGameBukkitRunnable(main).runTaskTimer(main, 0L, 20L);
+        new StartGameBukkitRunnable(main);
     }
 
     public void startGame() {
@@ -59,8 +65,14 @@ public class GameManager {
                 .filter(Objects::nonNull)
                 .forEach(TeleportationUtils::safeRandomlyTeleportPlayer);
 
+        startDayNightCycle();
+
         this.episodesManager.episode(1);
         this.episodesManager.startEpisodesRunnable();
+    }
+
+    public void giveRoleToPlayers() {
+        Roles.randomRoles();
     }
 
     public EpisodesManager episodesManager() {
